@@ -1,40 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins_bis.c                                     :+:      :+:    :+:   */
+/*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/24 00:43:32 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/05/25 00:10:57 by moidoubi         ###   ########.fr       */
+/*   Created: 2026/05/24 23:54:29 by moidoubi          #+#    #+#             */
+/*   Updated: 2026/05/24 23:57:00 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	builtin_unset(char **argv, t_shell *shell)
+void	echo_print(char **argv, int i)
 {
-	(void)argv;
-	(void)shell;
-	return (0);
-}
-
-int	builtin_env(t_shell *shell)
-{
-	int i;
-
-	i = 0;
-	while(shell->envp[i])
+	while (argv[i])
 	{
-		ft_putendl_fd(shell->envp[i], 1);
+		ft_putstr_fd(argv[i], 1);
+		if (argv[i + 1] != NULL)
+			ft_putchar_fd(' ', 1);
 		i++;
 	}
-	return (0);
-}
-
-int	builtin_exit(char **argv, t_shell *shell)
-{
-	(void)argv;
-	(void)shell;
-	return (0);
 }

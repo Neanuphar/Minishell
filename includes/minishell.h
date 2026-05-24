@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/05/24 22:23:36 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/05/24 23:55:22 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ int  run_builtin(char *cmd, char **argv, t_shell *shell);
 int free_tab(char **tab);
 char	*find_path(char *cmd, char **envp);
 char	*get_path_env(char **envp);
+int exec_extern(char **cmd, t_shell *shell);
+void	echo_print(char **argv, int i);
 
 /* --- builtins  --- */
 int			builtin_echo(char **argv);                   /* echo [-n] */

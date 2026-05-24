@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/24 00:03:14 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/05/24 23:01:25 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/05/24 23:13:38 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,31 @@ int	is_builtin(char *cmd)
 		return (1);
 	if (ft_strncmp(cmd, "exit", 5) == 0)
 		return (1);
+	return (0);
+}
+
+int exec_extern(char **cmd, t_shell *shell)
+{
+	pid_t	pid;
+	int		status;
+	char	*path;
+
+	pid = fork();
+	if (pid == -1)
+		return (1);
+	if (pid == 0)
+	{
+		path = find_path(cmd[0], shell->envp);
+		if (path == NULL)
+			exit(127);
+		execve(path, cmd, shell->envp);
+		exit(127);
+	}
+	if (pid > 0)
+	{
+		waitpid(pid, &status, 0);
+		return (WEXITSTATUS(status));
+	}
 	return (0);
 }
 
