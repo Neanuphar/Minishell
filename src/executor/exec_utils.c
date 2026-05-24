@@ -6,62 +6,60 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/24 00:03:14 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/05/24 22:20:00 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/05/24 23:01:25 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-
-
-int  run_builtin(char *cmd, char **argv, t_shell *shell)
+int	run_builtin(char *cmd, char **argv, t_shell *shell)
 {
-    if (ft_strncmp(cmd, "echo", 5) == 0)
-        return(builtin_echo(argv));
-    if (ft_strncmp(cmd, "cd", 3) == 0)
-        return(builtin_cd(argv, shell));
-    if (ft_strncmp(cmd, "pwd", 4) == 0)
-        return(builtin_pwd());
-    if (ft_strncmp(cmd, "export", 7) == 0)
-        return(builtin_export(argv, shell));
-    if (ft_strncmp(cmd, "unset", 6) == 0)
-        return(builtin_unset(argv, shell));
-    if (ft_strncmp(cmd, "env", 4) == 0)
-        return(builtin_env(shell));
-    if (ft_strncmp(cmd, "exit", 5) == 0)
-        return(builtin_exit(argv, shell));
-    return (0);
+	if (ft_strncmp(cmd, "echo", 5) == 0)
+		return (builtin_echo(argv));
+	if (ft_strncmp(cmd, "cd", 3) == 0)
+		return (builtin_cd(argv, shell));
+	if (ft_strncmp(cmd, "pwd", 4) == 0)
+		return (builtin_pwd());
+	if (ft_strncmp(cmd, "export", 7) == 0)
+		return (builtin_export(argv, shell));
+	if (ft_strncmp(cmd, "unset", 6) == 0)
+		return (builtin_unset(argv, shell));
+	if (ft_strncmp(cmd, "env", 4) == 0)
+		return (builtin_env(shell));
+	if (ft_strncmp(cmd, "exit", 5) == 0)
+		return (builtin_exit(argv, shell));
+	return (0);
 }
 
-int  is_builtin(char *cmd)
-{   
-    if (ft_strncmp(cmd, "echo", 5) == 0)
-        return (1);
-    if (ft_strncmp(cmd, "cd", 3) == 0)
-        return (1);
-    if (ft_strncmp(cmd, "pwd", 4) == 0)
-        return (1);
-    if (ft_strncmp(cmd, "export", 7) == 0)
-        return (1);
-    if (ft_strncmp(cmd, "unset", 6) == 0)
-        return (1);
-    if (ft_strncmp(cmd, "env", 4) == 0)
-        return (1);
-    if (ft_strncmp(cmd, "exit", 5) == 0)
-        return (1);
-    return (0);
+int	is_builtin(char *cmd)
+{
+	if (ft_strncmp(cmd, "echo", 5) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "cd", 3) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "pwd", 4) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "export", 7) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "unset", 6) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "env", 4) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "exit", 5) == 0)
+		return (1);
+	return (0);
 }
 
-int free_tab(char **tab)
+int	free_tab(char **tab)
 {
-    int i;
+	int i;
 
-    i = 0;
-    while (tab[i])
-    {
-        free(tab[i]);
-        i++;
-    }
-    free(tab);
-    return (0);
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+	return (0);
 }

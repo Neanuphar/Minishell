@@ -6,34 +6,33 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/05/24 00:50:01 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/05/24 23:01:13 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int			builtin_echo(char **argv)
+int	builtin_echo(char **argv)
 {
-    (void)argv;
-    return(0);
+	(void)argv;
+	return (0);
 }
 
-int			builtin_cd(char **argv, t_shell *shell)
+int	builtin_cd(char **argv, t_shell *shell)
 {
-    (void)argv;
-    (void)shell;
-    return(0);
+	(void)argv;
+	(void)shell;
+	return (0);
 }
 
-int			builtin_pwd(void)
+int	builtin_pwd(void)
 {
-    return(0);
+	return (0);
 }
 
-int			builtin_export(char **argv, t_shell *shell)
+int	builtin_export(char **argv, t_shell *shell)
 {
-    (void)argv;
-    (void)shell;
-    return(0);
+	(void)argv;
+	(void)shell;
+	return (0);
 }
-
