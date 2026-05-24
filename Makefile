@@ -6,8 +6,9 @@ SRCS    = src/main.c \
           src/expander/expander.c \
           src/executor/executor.c \
 		  src/executor/exec_utils.c \
+          src/executor/exec_path.c \
           src/builtins/builtins.c \
-          src/builtins/builtin_bis.c
+          src/builtins/builtins_bis.c
 
 OBJS    = $(SRCS:.c=.o)
 

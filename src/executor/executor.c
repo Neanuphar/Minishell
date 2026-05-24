@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/05/23 23:56:34 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/05/24 22:26:46 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,33 @@
 
 static int	exec_cmd(t_node *node, t_shell *shell)
 {
-	(void)node;
-	(void)shell;
+	char **cmd;
+	pid_t pid;
+	int	status;
+	char *path;
+
+	cmd = expand_argv(node->argv ,shell);
+	if (is_builtin(node->argv[0]) == 1)
+		return(run_builtin(cmd[0], cmd, shell));
+	else
+	{
+		pid = fork();
+		if (pid == -1)
+			return (1);
+		if (pid == 0)
+		{
+			path = find_path(cmd[0], shell->envp);
+			if (path == NULL)
+				exit(127);
+			execve(path, cmd, shell->envp);
+			exit(127);
+		}
+		if (pid > 0)
+		{
+			waitpid(pid, &status, 0);
+			return(WEXITSTATUS(status));
+		}
+	}
 	return (0);
 }
 

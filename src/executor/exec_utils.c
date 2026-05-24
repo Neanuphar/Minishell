@@ -6,11 +6,13 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/24 00:03:14 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/05/24 00:41:00 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/05/24 22:20:00 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+
 
 int  run_builtin(char *cmd, char **argv, t_shell *shell)
 {
@@ -47,5 +49,19 @@ int  is_builtin(char *cmd)
         return (1);
     if (ft_strncmp(cmd, "exit", 5) == 0)
         return (1);
+    return (0);
+}
+
+int free_tab(char **tab)
+{
+    int i;
+
+    i = 0;
+    while (tab[i])
+    {
+        free(tab[i]);
+        i++;
+    }
+    free(tab);
     return (0);
 }

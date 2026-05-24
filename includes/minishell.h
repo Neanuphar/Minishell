@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/05/24 00:48:29 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/05/24 22:23:36 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,10 @@ char		*expand_heredoc(char *body, t_shell *shell); /* substitue $VAR dans un her
 int			execute_ast(t_node *node, t_shell *shell); /* point d'entrée : exécute l'AST entier */
 int  is_builtin(char *cmd);
 int  run_builtin(char *cmd, char **argv, t_shell *shell);
+int free_tab(char **tab);
+char	*find_path(char *cmd, char **envp);
+char	*get_path_env(char **envp);
+
 /* --- builtins  --- */
 int			builtin_echo(char **argv);                   /* echo [-n] */
 int			builtin_cd(char **argv, t_shell *shell);     /* cd [path] — met à jour PWD/OLDPWD */
