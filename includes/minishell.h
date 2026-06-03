@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/05/26 23:34:21 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/03 21:23:11 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,12 @@
 # include <readline/history.h>    /* add_history */
 # include "../libft/libft.h"      /* fonctions libft */
 
-extern int	g_signal; /* seule variable globale autorisée — stocke le numéro du signal reçu */
+extern int	g_signal; /* stocke le numéro du signal reçu */
 
 typedef enum e_node_type
 {
 	NODE_CMD,  /* feuille : commande simple */
 	NODE_PIPE, /* noeud  : | */
-	NODE_AND,  /* noeud  : && */
-	NODE_OR    /* noeud  : || */
 }	t_node_type;
 
 typedef enum e_redir_type
@@ -44,7 +42,7 @@ typedef enum e_redir_type
 	REDIR_IN,     /* < */
 	REDIR_OUT,    /* > */
 	REDIR_APPEND, /* >> */
-	REDIR_HEREDOC /* << */
+	HEREDOC /* << */
 }	t_redir_type;
 
 typedef struct s_redir
@@ -82,25 +80,25 @@ char		*expand_heredoc(char *body, t_shell *shell); /* substitue $VAR dans un her
 
 /* --- executor  --- */
 int			execute_ast(t_node *node, t_shell *shell); /* point d'entrée : exécute l'AST entier */
-int  is_builtin(char *cmd);
-int  run_builtin(char *cmd, char **argv, t_shell *shell);
-int free_tab(char **tab);
-char	*find_path(char *cmd, char **envp);
-char	*get_path_env(char **envp);
-int exec_extern(char **cmd, t_shell *shell);
+int			is_builtin(char *cmd);                        /* vérifie si cmd est un builtin */
+int			run_builtin(char *cmd, char **argv, t_shell *shell); /* appelle le bon builtin */
+int			free_tab(char **tab);                         /* libère un tableau de strings */
+char		*find_path(char *cmd, char **envp);           /* cherche le chemin complet dans PATH */
+char		*get_path_env(char **envp);                   /* retourne la valeur de PATH depuis envp */
+int			exec_extern(char **cmd, t_shell *shell);      /* fork + execve + waitpid */
 
 /* --- builtins  --- */
-int			builtin_echo(char **argv);                   /* echo [-n] */
-int			builtin_cd(char **argv, t_shell *shell);     /* cd [path] — met à jour PWD/OLDPWD */
-int			builtin_pwd(void);                           /* affiche le répertoire courant */
-int			builtin_export(char **argv, t_shell *shell); /* ajoute/modifie une variable d'env */
-int			builtin_unset(char **argv, t_shell *shell);  /* supprime une variable d'env */
-int			builtin_env(t_shell *shell);                 /* affiche l'environnement complet */
-int			builtin_exit(char **argv, t_shell *shell);   /* quitte le shell avec un code */
-int	  env_find(char **envp, char *key);
-void	echo_print(char **argv, int i);
-char  **env_add(t_shell *shell, char *entry);
-void export_print(t_shell *shell);
-
+int			builtin_echo(char **argv);                    /* echo [-n] */
+int			builtin_cd(char **argv, t_shell *shell);      /* cd [path] — met à jour PWD/OLDPWD */
+int			builtin_pwd(void);                            /* affiche le répertoire courant */
+int			builtin_export(char **argv, t_shell *shell);  /* ajoute/modifie une variable d'env */
+int			builtin_unset(char **argv, t_shell *shell);   /* supprime une variable d'env */
+int			builtin_env(t_shell *shell);                  /* affiche l'environnement complet */
+int			builtin_exit(char **argv, t_shell *shell);    /* quitte le shell avec un code */
+int			env_find(char **envp, char *key);             /* retourne l'index de key dans envp */
+void		echo_print(char **argv, int i);               /* affiche argv[i..] séparés par espaces */
+char		**env_add(t_shell *shell, char *entry);       /* ajoute une entrée à shell->envp */
+void		export_print(t_shell *shell);                 /* affiche toutes les variables avec declare -x */
+void		cd_update_pwd(t_shell *shell, char *PWD, int boolen); /* met à jour OLDPWD ou PWD */
 
 #endif

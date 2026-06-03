@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/05/24 23:15:50 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/03 20:56:17 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ int	g_signal;
 // {
 // 	return (0);
 // }
+
 // ------------------------teste ls --------------------
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;

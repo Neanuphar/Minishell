@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/05/26 23:18:22 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/03 21:17:59 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,21 @@ int	builtin_echo(char **argv)
 
 int	builtin_cd(char **argv, t_shell *shell)
 {
-	(void)shell;
-	
+	char *new_PWD;
+	char *old_PWD;
+
 	if (argv[1] == NULL)
-	{
 		chdir(getenv("HOME"));
-	}
 	else
 	{
+		old_PWD = getcwd(NULL, 0);
+		cd_update_pwd(shell, old_PWD, 1);
 		if (chdir(argv[1]) == -1)
-			return(1);
+			return(free(old_PWD), 1);
+		new_PWD = getcwd(NULL, 0);
+		cd_update_pwd(shell, new_PWD, 0);
+		free(old_PWD);
+		free(new_PWD);
 	}
 	return (0);
 }
@@ -65,6 +70,8 @@ int	builtin_export(char **argv, t_shell *shell)
 		export_print(shell);
 	else
 	{
+		if (ft_strchr(argv[1], '=') == NULL)
+			return (env_add(shell, argv[1]), 0);
 		j = ft_strchr(argv[1], '=') - argv[1];
 		var = ft_substr(argv[1], 0, j);
 		idx = env_find(shell->envp, var);

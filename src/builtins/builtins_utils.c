@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/24 23:54:29 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/05/26 23:18:43 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/03 20:47:02 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,29 @@ void export_print(t_shell *shell)
 		ft_putstr_fd(shell->envp[i], 1);
 		ft_putchar_fd('\n', 1);
 		i++;
+	}
+}
+
+void cd_update_pwd(t_shell *shell, char *PWD, int boolen)
+{
+	int idx;
+
+	if (boolen == 1)
+	{
+		idx = env_find(shell->envp, "OLDPWD");
+		if (idx != -1)
+		{
+			free(shell->envp[idx]);
+			shell->envp[idx] = ft_strjoin("OLDPWD=", PWD);
+		}
+	}
+	else
+	{
+		idx = env_find(shell->envp, "PWD");
+		if (idx != -1)
+		{
+			free(shell->envp[idx]);
+			shell->envp[idx] = ft_strjoin("PWD=", PWD);
+		}
 	}
 }
