@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/24 00:03:14 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/05/24 23:13:38 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/03 23:06:38 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int exec_extern(char **cmd, t_shell *shell)
+int exec_extern(char **cmd, t_shell *shell, t_node *node)
 {
 	pid_t	pid;
 	int		status;
@@ -61,6 +61,7 @@ int exec_extern(char **cmd, t_shell *shell)
 		return (1);
 	if (pid == 0)
 	{
+		apply_redirs(node->redirs);
 		path = find_path(cmd[0], shell->envp);
 		if (path == NULL)
 			exit(127);

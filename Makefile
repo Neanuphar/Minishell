@@ -7,6 +7,7 @@ SRCS    = src/main.c \
           src/executor/executor.c \
 		  src/executor/exec_utils.c \
           src/executor/exec_path.c \
+          src/executor/exec_redir.c \
           src/builtins/builtins.c \
           src/builtins/builtins_bis.c \
           src/builtins/builtins_utils.c 

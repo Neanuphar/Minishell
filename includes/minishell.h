@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/03 21:23:11 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/04 06:16:18 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,9 @@ int			run_builtin(char *cmd, char **argv, t_shell *shell); /* appelle le bon bui
 int			free_tab(char **tab);                         /* libère un tableau de strings */
 char		*find_path(char *cmd, char **envp);           /* cherche le chemin complet dans PATH */
 char		*get_path_env(char **envp);                   /* retourne la valeur de PATH depuis envp */
-int			exec_extern(char **cmd, t_shell *shell);      /* fork + execve + waitpid */
+int			exec_extern(char **cmd, t_shell *shell,  t_node *node);      /* fork + execve + waitpid */
+int			apply_redirs(t_redir *redir); /* gestion des redirections*/
+int			open_file(t_redir *redir);
 
 /* --- builtins  --- */
 int			builtin_echo(char **argv);                    /* echo [-n] */

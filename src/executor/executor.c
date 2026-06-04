@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/03 21:19:43 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/03 23:16:13 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ static int	exec_cmd(t_node *node, t_shell *shell)
 	if (cmd == NULL)
 		return (1);
 	if (is_builtin(node->argv[0]) == 1)
-		return (run_builtin(cmd[0], cmd, shell));
+		return (apply_redirs(node->redirs), run_builtin(cmd[0], cmd, shell));
 	else
-		return (exec_extern(cmd, shell));
+		return (exec_extern(cmd, shell, node));
 }
 
 static int	exec_pipe(t_node *node, t_shell *shell)
