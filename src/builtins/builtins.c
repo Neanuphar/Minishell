@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/03 21:17:59 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/05 11:18:26 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ int	builtin_pwd(void)
 
 int	builtin_export(char **argv, t_shell *shell)
 {
+	int i;
 	int j;
-	int idx;
 	char *var;
 
 	j = 0;
@@ -74,12 +74,12 @@ int	builtin_export(char **argv, t_shell *shell)
 			return (env_add(shell, argv[1]), 0);
 		j = ft_strchr(argv[1], '=') - argv[1];
 		var = ft_substr(argv[1], 0, j);
-		idx = env_find(shell->envp, var);
+		i = env_find(shell->envp, var);
 		free (var);
-		if (idx != -1)
+		if (i != -1)
 		{
-			free(shell->envp[idx]);
-			shell->envp[idx] = ft_strdup(argv[1]);
+			free(shell->envp[i]);
+			shell->envp[i] = ft_strdup(argv[1]);
 		}
 		else
 			env_add(shell, argv[1]);
