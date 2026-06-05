@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/04 06:16:18 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/04 07:39:50 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ typedef enum e_node_type
 
 typedef enum e_redir_type
 {
-	REDIR_IN,     /* < */
-	REDIR_OUT,    /* > */
-	REDIR_APPEND, /* >> */
-	HEREDOC /* << */
+	REDIR_IN,     	/* < */
+	REDIR_OUT,    	/* > */
+	REDIR_APPEND, 	/* >> */
+	HEREDOC,		/* << */
 }	t_redir_type;
 
 typedef struct s_redir
@@ -71,21 +71,21 @@ typedef struct s_shell
 }	t_shell;
 
 /* --- parser  --- */
-t_node		*parse(char *input);    /* produit l'AST depuis la ligne brute */
-void		free_ast(t_node *node); /* libère l'arbre récursivement */
+t_node		*parse(char *input);	/* produit l'AST depuis la ligne brute */
+void		free_ast(t_node *node);	/* libère l'arbre récursivement */
 
 /* --- expander  --- */
 char		**expand_argv(char **argv, t_shell *shell);  /* substitue $VAR et retire les quotes */
 char		*expand_heredoc(char *body, t_shell *shell); /* substitue $VAR dans un heredoc */
 
 /* --- executor  --- */
-int			execute_ast(t_node *node, t_shell *shell); /* point d'entrée : exécute l'AST entier */
-int			is_builtin(char *cmd);                        /* vérifie si cmd est un builtin */
-int			run_builtin(char *cmd, char **argv, t_shell *shell); /* appelle le bon builtin */
-int			free_tab(char **tab);                         /* libère un tableau de strings */
-char		*find_path(char *cmd, char **envp);           /* cherche le chemin complet dans PATH */
-char		*get_path_env(char **envp);                   /* retourne la valeur de PATH depuis envp */
-int			exec_extern(char **cmd, t_shell *shell,  t_node *node);      /* fork + execve + waitpid */
+int			execute_ast(t_node *node, t_shell *shell);				/* point d'entrée : exécute l'AST entier */
+int			is_builtin(char *cmd);									/* vérifie si cmd est un builtin */
+int			run_builtin(char *cmd, char **argv, t_shell *shell);	/* appelle le bon builtin */
+int			free_tab(char **tab);									/* libère un tableau de strings */
+char		*find_path(char *cmd, char **envp);						/* cherche le chemin complet dans PATH */
+char		*get_path_env(char **envp);								/* retourne la valeur de PATH depuis envp */
+int			exec_extern(char **cmd, t_shell *shell,  t_node *node);	/* fork + execve + waitpid */
 int			apply_redirs(t_redir *redir); /* gestion des redirections*/
 int			open_file(t_redir *redir);
 
