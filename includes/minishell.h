@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/04 07:39:50 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/07 00:59:54 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ char		*get_path_env(char **envp);								/* retourne la valeur de PATH depuis en
 int			exec_extern(char **cmd, t_shell *shell,  t_node *node);	/* fork + execve + waitpid */
 int			apply_redirs(t_redir *redir); /* gestion des redirections*/
 int			open_file(t_redir *redir);
+void		fork_left(t_node *node, t_shell *shell, int	*pipefd);
+void		fork_right(t_node *node, t_shell *shell, int *pipefd);
 
 /* --- builtins  --- */
 int			builtin_echo(char **argv);                    /* echo [-n] */

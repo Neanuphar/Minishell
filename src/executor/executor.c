@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/03 23:16:13 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/07 01:06:05 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,28 @@ static int	exec_cmd(t_node *node, t_shell *shell)
 
 static int	exec_pipe(t_node *node, t_shell *shell)
 {
-	(void)node;
-	(void)shell;
-	return (0);
+	int		pipefd[2];
+	pid_t	pid_left;
+	pid_t	pid_right;
+	int		status;
+
+	if (pipe(pipefd) == -1)
+		return (-1);
+	pid_left = fork();
+	if (pid_left == -1)
+		return (1);
+	if (pid_left == 0)
+		fork_left(node, shell, pipefd);
+	pid_right = fork();
+	if (pid_right == -1)
+		return (1);
+	if (pid_right == 0)
+		fork_right(node, shell, pipefd);
+	close(pipefd[0]);
+	close(pipefd[1]);
+	waitpid(pid_left, NULL, 0);
+	waitpid(pid_right, &status, 0);
+	return (WEXITSTATUS(status));
 }
 
 int	execute_ast(t_node *node, t_shell *shell)
