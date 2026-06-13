@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/13 02:43:09 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/13 22:57:02 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,20 +90,20 @@ typedef struct s_shell
 t_token		*lexer(char *line);                  /* tokenise la ligne brute */
 void		free_token_list(t_token *list);       /* libère la liste de tokens */
 char		*get_word(char *line, int *i);        /* extrait un mot (avec gestion quotes) */
-void		add_token(t_token **list, t_token *new);
-t_token		*new_token(t_token_type type, char *value);
+void		add_token(t_token **list, t_token *new);      /* ajoute un token en fin de liste */
+t_token		*new_token(t_token_type type, char *value);   /* alloue et initialise un token */
 
 /* --- parser  --- */
 t_cmd		*parse_tokens(t_token *token);        /* produit la liste de t_cmd depuis les tokens */
 void		free_cmd_list(t_cmd *cmd);            /* libère la liste de t_cmd */
 void		free_ast(t_node *node);               /* libère l'arbre récursivement */
-void		add_redir(t_cmd *cmd, t_token_type type, char *file);
-void		add_arguments(t_cmd *cmd, char *word);
-t_cmd		*new_command(void);
-int			count_args(t_cmd *command);
-void		free_redirs_list(t_redir *redir);
-void		print_error(t_token *token);
-int			check_order(t_token *token);
+void		add_redir(t_cmd *cmd, t_token_type type, char *file); /* ajoute une redirection à la commande */
+void		add_arguments(t_cmd *cmd, char *word);                /* ajoute un argument à la commande */
+t_cmd		*new_command(void);                                   /* alloue une commande vide */
+int			count_args(t_cmd *command);                           /* compte les arguments */
+void		free_redirs_list(t_redir *redir);                     /* libère la liste de redirections */
+void		print_error(t_token *token);                          /* affiche une erreur de syntaxe sur stderr */
+int			check_order(t_token *token);                          /* vérifie la syntaxe des tokens */
 
 /* --- expander  --- */
 char		**expand_argv(char **argv, t_shell *shell);  /* substitue $VAR et retire les quotes */
@@ -115,10 +115,8 @@ int			is_builtin(char *cmd);                                 /* vérifie si cmd 
 int			run_builtin(char *cmd, char **argv, t_shell *shell);   /* appelle le bon builtin */
 int			free_tab(char **tab);                                  /* libère un tableau de strings */
 char		*find_path(char *cmd, char **envp);                    /* cherche le chemin complet dans PATH */
-char		*get_path_env(char **envp);                            /* retourne la valeur de PATH depuis envp */
 int			exec_extern(char **cmd, t_shell *shell, t_node *node); /* fork + execve + waitpid */
 int			apply_redirs(t_redir *redir);                          /* gestion des redirections */
-int			open_file(t_redir *redir);                             /* ouvre le fichier selon le type de redir */
 void		fork_left(t_node *node, t_shell *shell, int *pipefd);  /* child gauche du pipe */
 void		fork_right(t_node *node, t_shell *shell, int *pipefd); /* child droit du pipe */
 t_node		*bridge(char *input);                  /* point d'entrée : lexer + bridge + conversion AST */

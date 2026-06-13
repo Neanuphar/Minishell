@@ -6,13 +6,13 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/24 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/05/24 23:00:51 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/13 22:56:15 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*get_path_env(char **envp)
+static char	*get_path_env(char **envp)
 {
 	int	i;
 

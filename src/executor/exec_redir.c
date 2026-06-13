@@ -6,13 +6,13 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/05 11:12:32 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/13 22:56:32 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int open_file(t_redir *redir)
+static int open_file(t_redir *redir)
 {
 	int fd;
 	int pipefd[2];

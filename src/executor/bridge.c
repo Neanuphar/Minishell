@@ -6,11 +6,28 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/13 00:11:40 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/13 04:45:06 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/13 05:16:55 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void    free_ast(t_node *node)
+{
+    if (!node)
+        return ;
+    if (node->type == NODE_PIPE)
+    {
+        free_ast(node->left);
+        free_ast(node->right);
+    }
+    else
+    {
+        free_tab(node->argv);
+        free_redirs_list(node->redirs);
+    }
+    free(node);
+}
 
 static void free_cmds(t_cmd *cmd)
 {
