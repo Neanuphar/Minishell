@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/07 00:59:54 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/13 02:43:09 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,38 @@ typedef enum e_node_type
 	NODE_PIPE, /* noeud  : | */
 }	t_node_type;
 
-typedef enum e_redir_type
+typedef enum e_token_type
 {
-	REDIR_IN,     	/* < */
-	REDIR_OUT,    	/* > */
-	REDIR_APPEND, 	/* >> */
-	HEREDOC,		/* << */
-}	t_redir_type;
+	WORD,
+	PIPE,
+	REDIR_IN,     /* < */
+	REDIR_OUT,    /* > */
+	REDIR_APPEND, /* >> */
+	HEREDOC,      /* << */
+}	t_token_type;
 
 typedef struct s_redir
 {
-	t_redir_type	type;           /* type de redirection */
+	t_token_type	type;           /* type de redirection */
 	char			*file;          /* nom du fichier ou délimiteur heredoc */
 	char			*heredoc_body;  /* contenu du heredoc (NULL si pas heredoc) */
 	int				heredoc_quoted; /* délimiteur quoté ? 1 = pas d'expansion */
 	struct s_redir	*next;          /* redirection suivante */
 }	t_redir;
+
+typedef struct s_token
+{
+	t_token_type	type;           /* type du token */
+	char			*value;         /* valeur (NULL pour les opérateurs) */
+	struct s_token	*next;          /* token suivant */
+}	t_token;
+
+typedef struct s_cmd
+{
+	char			**args;         /* arguments de la commande */
+	t_redir			*redirs;        /* liste de redirections */
+	struct s_cmd	*next;          /* commande suivante (après un pipe) */
+}	t_cmd;
 
 typedef struct s_node
 {
@@ -70,26 +86,43 @@ typedef struct s_shell
 	int		running;    /* 1 = shell actif, 0 = on quitte */
 }	t_shell;
 
+/* --- lexer  --- */
+t_token		*lexer(char *line);                  /* tokenise la ligne brute */
+void		free_token_list(t_token *list);       /* libère la liste de tokens */
+char		*get_word(char *line, int *i);        /* extrait un mot (avec gestion quotes) */
+void		add_token(t_token **list, t_token *new);
+t_token		*new_token(t_token_type type, char *value);
+
 /* --- parser  --- */
-t_node		*parse(char *input);	/* produit l'AST depuis la ligne brute */
-void		free_ast(t_node *node);	/* libère l'arbre récursivement */
+t_cmd		*parse_tokens(t_token *token);        /* produit la liste de t_cmd depuis les tokens */
+void		free_cmd_list(t_cmd *cmd);            /* libère la liste de t_cmd */
+void		free_ast(t_node *node);               /* libère l'arbre récursivement */
+void		add_redir(t_cmd *cmd, t_token_type type, char *file);
+void		add_arguments(t_cmd *cmd, char *word);
+t_cmd		*new_command(void);
+int			count_args(t_cmd *command);
+void		free_redirs_list(t_redir *redir);
+void		print_error(t_token *token);
+int			check_order(t_token *token);
 
 /* --- expander  --- */
 char		**expand_argv(char **argv, t_shell *shell);  /* substitue $VAR et retire les quotes */
 char		*expand_heredoc(char *body, t_shell *shell); /* substitue $VAR dans un heredoc */
 
 /* --- executor  --- */
-int			execute_ast(t_node *node, t_shell *shell);				/* point d'entrée : exécute l'AST entier */
-int			is_builtin(char *cmd);									/* vérifie si cmd est un builtin */
-int			run_builtin(char *cmd, char **argv, t_shell *shell);	/* appelle le bon builtin */
-int			free_tab(char **tab);									/* libère un tableau de strings */
-char		*find_path(char *cmd, char **envp);						/* cherche le chemin complet dans PATH */
-char		*get_path_env(char **envp);								/* retourne la valeur de PATH depuis envp */
-int			exec_extern(char **cmd, t_shell *shell,  t_node *node);	/* fork + execve + waitpid */
-int			apply_redirs(t_redir *redir); /* gestion des redirections*/
-int			open_file(t_redir *redir);
-void		fork_left(t_node *node, t_shell *shell, int	*pipefd);
-void		fork_right(t_node *node, t_shell *shell, int *pipefd);
+int			execute_ast(t_node *node, t_shell *shell);             /* point d'entrée : exécute l'AST entier */
+int			is_builtin(char *cmd);                                 /* vérifie si cmd est un builtin */
+int			run_builtin(char *cmd, char **argv, t_shell *shell);   /* appelle le bon builtin */
+int			free_tab(char **tab);                                  /* libère un tableau de strings */
+char		*find_path(char *cmd, char **envp);                    /* cherche le chemin complet dans PATH */
+char		*get_path_env(char **envp);                            /* retourne la valeur de PATH depuis envp */
+int			exec_extern(char **cmd, t_shell *shell, t_node *node); /* fork + execve + waitpid */
+int			apply_redirs(t_redir *redir);                          /* gestion des redirections */
+int			open_file(t_redir *redir);                             /* ouvre le fichier selon le type de redir */
+void		fork_left(t_node *node, t_shell *shell, int *pipefd);  /* child gauche du pipe */
+void		fork_right(t_node *node, t_shell *shell, int *pipefd); /* child droit du pipe */
+t_node		*bridge(char *input);                  /* point d'entrée : lexer + bridge + conversion AST */
+
 
 /* --- builtins  --- */
 int			builtin_echo(char **argv);                    /* echo [-n] */
@@ -104,5 +137,6 @@ void		echo_print(char **argv, int i);               /* affiche argv[i..] sépar�
 char		**env_add(t_shell *shell, char *entry);       /* ajoute une entrée à shell->envp */
 void		export_print(t_shell *shell);                 /* affiche toutes les variables avec declare -x */
 void		cd_update_pwd(t_shell *shell, char *PWD, int boolen); /* met à jour OLDPWD ou PWD */
+int			is_flag_n(char *s);                           /* vérifie si s est un flag -n valide */
 
 #endif

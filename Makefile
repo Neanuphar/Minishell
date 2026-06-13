@@ -3,15 +3,22 @@ CC      = cc
 CFLAGS  = -Wall -Wextra -Werror
 
 SRCS    = src/main.c \
+		  src/lexer/lexer.c \
+		  src/lexer/lexer_utils.c \
+		  src/lexer/lexer_utils2.c \
+		  src/parser/parser.c \
+		  src/parser/parser_utils.c \
           src/expander/expander.c \
           src/executor/executor.c \
 		  src/executor/exec_utils.c \
           src/executor/exec_path.c \
           src/executor/exec_redir.c \
 		  src/executor/exec_pipe.c \
+		  src/executor/bridge.c \
           src/builtins/builtins.c \
           src/builtins/builtins_bis.c \
-          src/builtins/builtins_utils.c 
+          src/builtins/builtins_utils.c \
+		  src/builtins/builtins_utils_bis.c
 
 OBJS    = $(SRCS:.c=.o)
 

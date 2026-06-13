@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/05 11:18:26 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/11 19:45:49 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,25 @@
 
 int	builtin_echo(char **argv)
 {
+	int	i;
+	int boolen;
+
+	boolen = 0;
+	i = 1;
 	if (argv[1] == NULL)
 		return (ft_putchar_fd('\n', 1), 0);
-	if (argv[1][0] == '-' && argv[1][1] == 'n')
-		echo_print(argv, 2);
+	while (argv[i] != NULL)
+	{
+		if (is_flag_n(argv[i]))
+		{
+			boolen = 1;
+			i++;
+		}
+		else
+			break;
+	}
+	if (boolen == 1)
+		echo_print(argv, i);
 	else
 	{
 		echo_print(argv, 1);
