@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/13 22:57:02 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/14 06:04:35 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,9 @@ int			check_order(t_token *token);                          /* vérifie la synta
 /* --- expander  --- */
 char		**expand_argv(char **argv, t_shell *shell);  /* substitue $VAR et retire les quotes */
 char		*expand_heredoc(char *body, t_shell *shell); /* substitue $VAR dans un heredoc */
+int count(char **argv);
+//char *del_quote(char *argv);
+char *expand_word(char *argv, t_shell *shell);
 
 /* --- executor  --- */
 int			execute_ast(t_node *node, t_shell *shell);             /* point d'entrée : exécute l'AST entier */

@@ -9,6 +9,7 @@ SRCS    = src/main.c \
 		  src/parser/parser.c \
 		  src/parser/parser_utils.c \
           src/expander/expander.c \
+		  src/expander/expander_utils.c \
           src/executor/executor.c \
 		  src/executor/exec_utils.c \
           src/executor/exec_path.c \
