@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 07:21:56 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/21 08:44:35 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ int			run_builtin(char *cmd, char **argv, t_shell *shell);   /* appelle le bon b
 int			free_tab(char **tab);                                  /* libère un tableau de strings */
 char		*find_path(char *cmd, char **envp);                    /* cherche le chemin complet dans PATH */
 int			exec_extern(char **cmd, t_shell *shell, t_node *node); /* fork + execve + waitpid */
-int			apply_redirs(t_redir *redir);                          /* gestion des redirections */
+int	apply_redirs(t_redir *redir, t_shell *shell);                          /* gestion des redirections */
 void		fork_left(t_node *node, t_shell *shell, int *pipefd);  /* child gauche du pipe */
 void		fork_right(t_node *node, t_shell *shell, int *pipefd); /* child droit du pipe */
 t_node		*bridge(char *input);                  /* point d'entrée : lexer + bridge + conversion AST */
