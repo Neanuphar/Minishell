@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/03 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 08:43:59 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/21 10:20:45 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int open_file(t_redir *redir, t_shell *shell)
 int	apply_redirs(t_redir *redir, t_shell *shell)
 {
 	int fd;
-
+	
 	while (redir)
 	{
 		fd = open_file(redir, shell);

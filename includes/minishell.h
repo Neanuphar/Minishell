@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 08:44:35 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/21 10:46:29 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,15 +106,14 @@ void		print_error(t_token *token);                          /* affiche une erreu
 int			check_order(t_token *token);                          /* vérifie la syntaxe des tokens */
 
 /* --- expander  --- */
-char		**expand_argv(char **argv, t_shell *shell);  /* substitue $VAR et retire les quotes */
-char		*expand_heredoc(char *body, t_shell *shell); /* substitue $VAR dans un heredoc */
-//char *del_quote(char *argv);
-char *expand_word(char *argv, t_shell *shell);
-char *append_char(char *result, char *letter);
-char *handle_single_quote(char *argv, int *i);
-int count(char **argv);
-char *search_var(char *str);
-char *handle_dollar(char *result,char *var,t_shell *shell);
+char		**expand_argv(char **argv, t_shell *shell);              /* substitue $VAR, retire les quotes, filtre les vides */
+char		*expand_heredoc(char *body, t_shell *shell);             /* substitue $VAR dans un heredoc (pas de quote stripping) */
+char		*expand_word(char *argv, t_shell *shell);                /* traite un mot : quotes, $VAR, littéral */
+char		*append_char(char *result, char *letter);                /* concatène letter à result et libère les deux */
+char		*handle_single_quote(char *argv, int *i);                /* copie le contenu entre '' sans expansion */
+int			count(char **argv);                                      /* compte les éléments d'un tableau de strings */
+char		*search_var(char *str);                                  /* extrait le nom de variable après un $ */
+char		*handle_dollar(char *result, char *var, t_shell *shell); /* substitue $VAR ou $? dans result */
 
 
 /* --- executor  --- */
@@ -124,11 +123,11 @@ int			run_builtin(char *cmd, char **argv, t_shell *shell);   /* appelle le bon b
 int			free_tab(char **tab);                                  /* libère un tableau de strings */
 char		*find_path(char *cmd, char **envp);                    /* cherche le chemin complet dans PATH */
 int			exec_extern(char **cmd, t_shell *shell, t_node *node); /* fork + execve + waitpid */
-int	apply_redirs(t_redir *redir, t_shell *shell);                          /* gestion des redirections */
+int			apply_redirs(t_redir *redir, t_shell *shell);          /* applique toutes les redirections d'une commande */
 void		fork_left(t_node *node, t_shell *shell, int *pipefd);  /* child gauche du pipe */
 void		fork_right(t_node *node, t_shell *shell, int *pipefd); /* child droit du pipe */
-t_node		*bridge(char *input);                  /* point d'entrée : lexer + bridge + conversion AST */
-void fill_heredocs(t_node *node);
+t_node		*bridge(char *input);                                  /* point d'entrée : lexer + parser + conversion AST */
+void		fill_heredocs(t_node *node);                           /* parcourt l'AST et lit tous les heredocs */
 
 
 /* --- builtins  --- */
