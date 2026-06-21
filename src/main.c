@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/13 22:52:34 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/21 05:35:03 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int main(int argc, char **argv, char **envp)
 			break;
 		add_history(readed);
 		ast = bridge(readed);
-		execute_ast(ast, &shell);
+		shell.exit_code = execute_ast(ast, &shell);
 		free_ast(ast);
 		free(readed);
 	}
