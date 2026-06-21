@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 16:39:15 by aakli             #+#    #+#             */
-/*   Updated: 2026/06/11 20:00:43 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/18 14:14:31 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static int handle_quote(char *line, int *i, char *word, int *j)
     char quote;
 
     quote = line[*i];
+    word[(*j)++] = quote;
     (*i)++;
     while (line[*i] && line[*i] != quote)
     {
@@ -26,6 +27,7 @@ static int handle_quote(char *line, int *i, char *word, int *j)
     }
     if (!line[*i])
         return (-1);
+    word[(*j)++] = line[*i];
     (*i)++;
     return (0);
 }
