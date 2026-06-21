@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/14 05:15:05 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 04:08:51 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/21 05:31:37 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,25 @@ static char *handle_dollar(char *result,char *var,t_shell *shell)
 {
 	int j;
 	char *tmp;
+	char *exitcode;
 	
+	exitcode = ft_itoa(shell->exit_code);
 	if((j = env_find(shell->envp, var)) != -1)
 	{
 		tmp = ft_strjoin(result, shell->envp[j] + ft_strlen(var) + 1);
 		free(result);
-		free(var);
 		result = tmp;
 	}
 	else
 	{
-		tmp = ft_strjoin(result, "");
+		if(var[0] == '?')
+			tmp = ft_strjoin(result, exitcode);
+		else
+			tmp = ft_strjoin(result, "");
 		free(result);
-		free(var);
 		result = tmp;
 	}
-	return (result);
+	return (free(var), free(exitcode), result);
 }
 
 static char *search_var(char *str)
@@ -56,7 +59,9 @@ static char *search_var(char *str)
 	var = (char *)malloc(ft_strlen(str) + 1);
 	if (!var)
 		return (NULL);
-	if (str[i] == 32 || str[i] == '\0' || (str[i] >= 7 && str[i] <= 13))
+	if (str[i] == '?')
+		var[j++] = '?';
+	else if (str[i] == 32 || str[i] == '\0' || (str[i] >= 7 && str[i] <= 13))
 		return (free(var), NULL);
 	while(ft_isalnum(str[i]) || str[i] == '_')
 		var[j++] = str[i++];
@@ -109,7 +114,7 @@ char *expand_word(char *argv, t_shell *shell)
 			result = append_char(result, handle_double_quote(argv, &i, shell));
 		else if(argv[i] == 36 && (var = search_var(&argv[i + 1])) != NULL)
 		{
-			i +=  ft_strlen(var);
+			i += ft_strlen(var);
 			result = handle_dollar(result, var, shell);
 		}
 		else
