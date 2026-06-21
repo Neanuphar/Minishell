@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 04:26:38 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/21 05:49:03 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	**expand_argv(char **argv, t_shell *shell)
 	{
 		tmp = expand_word(argv[i], shell);
 		if (!tmp || (!tmp[0] && !ft_strchr(argv[i], 39) && !ft_strchr(argv[i], 34)))
-			free(tmp);
+        	free(tmp);
 		else
 			new[j++] = tmp;
 		i++;
@@ -37,8 +37,24 @@ char	**expand_argv(char **argv, t_shell *shell)
 	return (new);
 }
 
-char	*expand_heredoc(char *body, t_shell *shell)
+char	*expand_heredoc(char *argv, t_shell *shell)
 {
-	(void)shell;
-	return (body);
+	int i;
+	char *var;
+	char *result;
+
+	i = 0;
+	result = ft_strdup("");
+	while (argv[i])
+	{
+		if(argv[i] == 36 && (var = search_var(&argv[i + 1])) != NULL)
+		{
+			i += ft_strlen(var);
+			result = handle_dollar(result, var, shell);
+		}
+		else
+			result = append_char(result, ft_substr(argv, i, 1));
+		i++;
+	}	
+	return(result);
 }

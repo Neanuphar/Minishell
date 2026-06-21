@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/14 05:15:05 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 05:31:37 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/21 05:44:10 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char *append_char(char *result, char *letter)
 	return (result);
 }
 
-static char *handle_dollar(char *result,char *var,t_shell *shell)
+char *handle_dollar(char *result,char *var,t_shell *shell)
 {
 	int j;
 	char *tmp;
@@ -48,7 +48,7 @@ static char *handle_dollar(char *result,char *var,t_shell *shell)
 	return (free(var), free(exitcode), result);
 }
 
-static char *search_var(char *str)
+char *search_var(char *str)
 {
 	int i;
 	int j;
@@ -109,7 +109,7 @@ char *expand_word(char *argv, t_shell *shell)
 	while (argv[i])
 	{
 		if(argv[i] == 39)
-			result = append_char(result, handle_single_quote(argv, &i, shell));
+			result = append_char(result, handle_single_quote(argv, &i));
 		else if(argv[i] == 34)
 			result = append_char(result, handle_double_quote(argv, &i, shell));
 		else if(argv[i] == 36 && (var = search_var(&argv[i + 1])) != NULL)

@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 03:05:57 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 03:49:02 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/21 05:40:45 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,12 @@ int count(char **argv)
 	return (i);
 }
 
-char *handle_single_quote(char *argv, int *i, t_shell *shell)
+char *handle_single_quote(char *argv, int *i)
 {
 	char quote;
 	char *letter;
 	char *result;
 
-	(void)shell;
 	result = ft_strdup("");
 	quote = argv[*i];
 	(*i)++;

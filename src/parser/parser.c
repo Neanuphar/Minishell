@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
+/*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/08 17:01:27 by aakli             #+#    #+#             */
-/*   Updated: 2026/06/11 15:33:15 by aakli            ###   ########.fr       */
+/*   Updated: 2026/06/21 08:24:07 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,10 @@ t_cmd *parse_tokens(t_token *token)
             add_arguments(tmp, token->value);
         if (token->type == REDIR_IN || token->type == REDIR_OUT 
             || token->type == REDIR_APPEND || token->type == HEREDOC)
+        {
             add_redir(tmp, token->type, token->next->value);
+            token = token->next;
+        }
         if(token->type == PIPE)
         {
             tmp->next = new_command();

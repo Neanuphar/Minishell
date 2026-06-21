@@ -17,6 +17,7 @@ SRCS    = src/main.c \
           src/executor/exec_redir.c \
 		  src/executor/exec_pipe.c \
 		  src/executor/bridge.c \
+		  src/executor/bridge_utils.c \
           src/builtins/builtins.c \
           src/builtins/builtins_bis.c \
           src/builtins/builtins_utils.c \

@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/13 00:11:40 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/13 05:16:55 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/21 07:22:59 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ t_node	*bridge(char *input)
 		return (free_token_list(tokens), NULL);
 	free_token_list(tokens);
 	ast = cmd_to_node(cmds);
+	fill_heredocs(ast);
 	free_cmds(cmds);
 	return(ast);
 }

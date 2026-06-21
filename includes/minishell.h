@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 03:57:02 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/21 07:21:56 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,10 @@ char		*expand_heredoc(char *body, t_shell *shell); /* substitue $VAR dans un her
 //char *del_quote(char *argv);
 char *expand_word(char *argv, t_shell *shell);
 char *append_char(char *result, char *letter);
-char *handle_single_quote(char *argv, int *i, t_shell *shell);
+char *handle_single_quote(char *argv, int *i);
 int count(char **argv);
+char *search_var(char *str);
+char *handle_dollar(char *result,char *var,t_shell *shell);
 
 
 /* --- executor  --- */
@@ -126,6 +128,7 @@ int			apply_redirs(t_redir *redir);                          /* gestion des redi
 void		fork_left(t_node *node, t_shell *shell, int *pipefd);  /* child gauche du pipe */
 void		fork_right(t_node *node, t_shell *shell, int *pipefd); /* child droit du pipe */
 t_node		*bridge(char *input);                  /* point d'entrée : lexer + bridge + conversion AST */
+void fill_heredocs(t_node *node);
 
 
 /* --- builtins  --- */
