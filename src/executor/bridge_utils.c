@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/21 05:57:33 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 08:42:38 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/24 09:42:43 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ char *read_heredoc(char *delim)
 	while(1)
 	{
 		line = readline("> ");
+		if (!line)
+    		return (readed);
 		if(ft_strncmp(line, delim, len_delim) == 0 && line[len_delim] == '\0')
 			return(free(line), readed);
 		readed = append_char(readed, ft_strjoin(line, "\n"));

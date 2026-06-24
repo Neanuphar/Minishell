@@ -6,16 +6,16 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/14 05:15:05 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 05:44:10 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/24 07:57:17 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char *append_char(char *result, char *letter)
+char	*append_char(char *result, char *letter)
 {
-	char *tmp;
-	
+	char	*tmp;
+
 	tmp = ft_strjoin(result, letter);
 	free(letter);
 	free(result);
@@ -23,14 +23,15 @@ char *append_char(char *result, char *letter)
 	return (result);
 }
 
-char *handle_dollar(char *result,char *var,t_shell *shell)
+char	*handle_dollar(char *result, char *var, t_shell *shell)
 {
-	int j;
-	char *tmp;
-	char *exitcode;
-	
+	int		j;
+	char	*tmp;
+	char	*exitcode;
+
 	exitcode = ft_itoa(shell->exit_code);
-	if((j = env_find(shell->envp, var)) != -1)
+	j = env_find(shell->envp, var);
+	if (j != -1)
 	{
 		tmp = ft_strjoin(result, shell->envp[j] + ft_strlen(var) + 1);
 		free(result);
@@ -38,7 +39,7 @@ char *handle_dollar(char *result,char *var,t_shell *shell)
 	}
 	else
 	{
-		if(var[0] == '?')
+		if (var[0] == '?')
 			tmp = ft_strjoin(result, exitcode);
 		else
 			tmp = ft_strjoin(result, "");
@@ -48,12 +49,12 @@ char *handle_dollar(char *result,char *var,t_shell *shell)
 	return (free(var), free(exitcode), result);
 }
 
-char *search_var(char *str)
+char	*search_var(char *str)
 {
-	int i;
-	int j;
-	char *var;
-	
+	int		i;
+	int		j;
+	char	*var;
+
 	i = 0;
 	j = 0;
 	var = (char *)malloc(ft_strlen(str) + 1);
@@ -63,7 +64,7 @@ char *search_var(char *str)
 		var[j++] = '?';
 	else if (str[i] == 32 || str[i] == '\0' || (str[i] >= 7 && str[i] <= 13))
 		return (free(var), NULL);
-	while(ft_isalnum(str[i]) || str[i] == '_')
+	while (ft_isalnum(str[i]) || str[i] == '_')
 		var[j++] = str[i++];
 	if (j == 0)
 		return (free(var), NULL);
@@ -71,55 +72,47 @@ char *search_var(char *str)
 	return (var);
 }
 
-static char *handle_double_quote(char *argv, int *i, t_shell *shell)
+static char	*handle_double_quote(char *argv, int *i, t_shell *shell)
 {
-	char quote;
-	char *var;
-	char *letter;
-	char *result;
+	char	quote;
+	char	*letter;
+	char	*result;
 
 	result = ft_strdup("");
 	quote = argv[*i];
 	(*i)++;
 	while (argv[*i] && argv[*i] != quote)
 	{
-		if(argv[*i] == 36 && (var = search_var(&argv[*i + 1])) != NULL)
-		{
-			*i +=  ft_strlen(var);
-			result = handle_dollar(result, var, shell);
-		}
+		if (argv[*i] == 36)
+			result = handle_dollar_in_str(argv, i, result, shell);
 		else
 		{
 			letter = ft_substr(argv, *i, 1);
-			result = append_char(result, letter);	
+			result = append_char(result, letter);
 		}
 		(*i)++;
 	}
 	return (result);
 }
 
-char *expand_word(char *argv, t_shell *shell)
+char	*expand_word(char *argv, t_shell *shell)
 {
-	int i;
-	char *var;
-	char *result;
+	int		i;
+	char	*result;
 
 	i = 0;
 	result = ft_strdup("");
 	while (argv[i])
 	{
-		if(argv[i] == 39)
+		if (argv[i] == 39)
 			result = append_char(result, handle_single_quote(argv, &i));
-		else if(argv[i] == 34)
+		else if (argv[i] == 34)
 			result = append_char(result, handle_double_quote(argv, &i, shell));
-		else if(argv[i] == 36 && (var = search_var(&argv[i + 1])) != NULL)
-		{
-			i += ft_strlen(var);
-			result = handle_dollar(result, var, shell);
-		}
+		else if (argv[i] == 36)
+			result = handle_dollar_in_str(argv, &i, result, shell);
 		else
 			result = append_char(result, ft_substr(argv, i, 1));
 		i++;
-	}	
-	return(result);
+	}
+	return (result);
 }

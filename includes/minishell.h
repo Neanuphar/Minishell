@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 10:46:29 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/24 09:32:46 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ char		*handle_single_quote(char *argv, int *i);                /* copie le conte
 int			count(char **argv);                                      /* compte les éléments d'un tableau de strings */
 char		*search_var(char *str);                                  /* extrait le nom de variable après un $ */
 char		*handle_dollar(char *result, char *var, t_shell *shell); /* substitue $VAR ou $? dans result */
+char *handle_dollar_in_str(char *argv, int *i, char *result, t_shell *shell);
 
 
 /* --- executor  --- */
@@ -144,5 +145,7 @@ char		**env_add(t_shell *shell, char *entry);       /* ajoute une entrée à she
 void		export_print(t_shell *shell);                 /* affiche toutes les variables avec declare -x */
 void		cd_update_pwd(t_shell *shell, char *PWD, int boolen); /* met à jour OLDPWD ou PWD */
 int			is_flag_n(char *s);                           /* vérifie si s est un flag -n valide */
+int is_all_num(char *argv);
+int exit_error(char *argv);
 
 #endif

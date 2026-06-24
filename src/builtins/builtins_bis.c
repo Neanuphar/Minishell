@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/24 00:43:32 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/05 11:18:00 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/24 09:41:44 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,13 @@ int	builtin_exit(char **argv, t_shell *shell)
 	
 	if (argv[1] == NULL)
 		exit(shell->exit_code);
+	else if (argv[2] != NULL)
+	{
+		ft_putendl_fd("exit: too many arguments", 2);
+		return(1);
+	}
+	else if (is_all_num(argv[1]))
+		exit(exit_error(argv[1]));
 	else
 	{
 		code = ft_atoi(argv[1]);
