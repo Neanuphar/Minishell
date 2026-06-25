@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/24 23:54:29 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/05 11:17:52 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/23 18:57:44 by aakli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void	echo_print(char **argv, int i)
 	}
 }
 
-int	  env_find(char **envp, char *key)
+int	env_find(char **envp, char *key)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (envp[i])
@@ -40,11 +40,11 @@ int	  env_find(char **envp, char *key)
 	return (-1);
 }
 
-char  **env_add(t_shell *shell, char *entry)
+char	**env_add(t_shell *shell, char *entry)
 {
-	int	len;
-	int i;
-	char **new_tab;
+	int		len;
+	int		i;
+	char	**new_tab;
 
 	len = 0;
 	i = 0;
@@ -61,12 +61,12 @@ char  **env_add(t_shell *shell, char *entry)
 	new_tab[i] = NULL;
 	free(shell->envp);
 	shell->envp = new_tab;
-	return(new_tab);
+	return (new_tab);
 }
 
-void export_print(t_shell *shell)
+void	export_print(t_shell *shell)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (shell->envp[i] != NULL)
@@ -78,9 +78,9 @@ void export_print(t_shell *shell)
 	}
 }
 
-void cd_update_pwd(t_shell *shell, char *PWD, int boolen)
+void	cd_update_pwd(t_shell *shell, char *PWD, int boolen)
 {
-	int i;
+	int	i;
 
 	if (boolen == 1)
 	{

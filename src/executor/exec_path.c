@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/24 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 08:42:36 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/24 22:51:16 by aakli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,13 @@ static char	*get_path_env(char **envp)
 	return (NULL);
 }
 
-char	*find_path(char *cmd, char **envp)
+static char	*search_in_path(char *cmd, char **dirs)
 {
 	char	*tmp;
 	char	*full;
-	char	**dirs;
-	char	*path_env;
 	int		i;
 
 	i = 0;
-	path_env = get_path_env(envp);
-	if (path_env == NULL)
-		return (NULL);
-	dirs = ft_split(path_env, ':');
-	if (dirs == NULL)
-		return (NULL);
 	while (dirs[i])
 	{
 		tmp = ft_strjoin(dirs[i], "/");
@@ -55,4 +47,24 @@ char	*find_path(char *cmd, char **envp)
 		i++;
 	}
 	return (free_tab(dirs), NULL);
+}
+
+char	*find_path(char *cmd, char **envp)
+{
+	char	**dirs;
+	char	*path_env;
+
+	if (ft_strchr(cmd, '/') != NULL)
+	{
+		if (access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
+	path_env = get_path_env(envp);
+	if (path_env == NULL)
+		return (NULL);
+	dirs = ft_split(path_env, ':');
+	if (dirs == NULL)
+		return (NULL);
+	return (search_in_path(cmd, dirs));
 }

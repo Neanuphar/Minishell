@@ -3,35 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   bridge.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/13 00:11:40 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 08:42:37 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/24 22:50:45 by aakli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void    free_ast(t_node *node)
+void	free_ast(t_node *node)
 {
-    if (!node)
-        return ;
-    if (node->type == NODE_PIPE)
-    {
-        free_ast(node->left);
-        free_ast(node->right);
-    }
-    else
-    {
-        free_tab(node->argv);
-        free_redirs_list(node->redirs);
-    }
-    free(node);
+	if (!node)
+		return ;
+	if (node->type == NODE_PIPE)
+	{
+		free_ast(node->left);
+		free_ast(node->right);
+	}
+	else
+	{
+		free_tab(node->argv);
+		free_redirs_list(node->redirs);
+	}
+	free(node);
 }
 
-static void free_cmds(t_cmd *cmd)
+static void	free_cmds(t_cmd *cmd)
 {
-	t_cmd *next;
+	t_cmd	*next;
 
 	while (cmd)
 	{
@@ -41,7 +41,7 @@ static void free_cmds(t_cmd *cmd)
 	}
 }
 
-static	t_node	*create_cmd_node(t_cmd *cmd)
+static t_node	*create_cmd_node(t_cmd *cmd)
 {
 	t_node	*cmd_node;
 
@@ -56,14 +56,14 @@ static	t_node	*create_cmd_node(t_cmd *cmd)
 	return (cmd_node);
 }
 
-static t_node *cmd_to_node(t_cmd *cmd)
+static t_node	*cmd_to_node(t_cmd *cmd)
 {
 	t_node	*node;
 
 	if (cmd->next == NULL)
-		return(create_cmd_node(cmd));
+		return (create_cmd_node(cmd));
 	node = malloc(sizeof(t_node));
-	if(!node)
+	if (!node)
 		return (NULL);
 	else
 	{
@@ -78,19 +78,24 @@ static t_node *cmd_to_node(t_cmd *cmd)
 
 t_node	*bridge(char *input)
 {
-	t_token *tokens;
-	t_cmd *cmds;
-	t_node *ast;
+	t_token	*tokens;
+	t_cmd	*cmds;
+	t_node	*ast;
 
 	tokens = lexer(input);
-	if(!tokens)
+	if (!tokens)
 		return (NULL);
 	cmds = parse_tokens(tokens);
-	if(!cmds)
+	if (!cmds)
 		return (free_token_list(tokens), NULL);
 	free_token_list(tokens);
 	ast = cmd_to_node(cmds);
-	fill_heredocs(ast);
+	if (!fill_heredocs(ast))
+	{
+		free_cmds(cmds);
+		free_ast(ast);
+		return (NULL);
+	}
 	free_cmds(cmds);
-	return(ast);
+	return (ast);
 }

@@ -3,16 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 05:35:03 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/24 22:56:46 by aakli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	g_signal;
+void	free_envp(char **envp)
+{
+	int	i;
+
+	if (!envp)
+		return ;
+	i = 0;
+	while (envp[i])
+		free(envp[i++]);
+	free(envp);
+}
 
 static char	**envp_dup(char **envp)
 {
@@ -24,6 +34,8 @@ static char	**envp_dup(char **envp)
 	while (envp[len])
 		len++;
 	copy = malloc(sizeof(char *) * (len + 1));
+	if (!copy)
+		return (NULL);
 	i = 0;
 	while (i < len)
 	{
@@ -34,27 +46,44 @@ static char	**envp_dup(char **envp)
 	return (copy);
 }
 
-int main(int argc, char **argv, char **envp)
+static void	shell_loop(t_shell *shell, struct termios *saved_term)
 {
-	t_shell shell;
-	t_node *ast;
-	char *readed;
-	
+	t_node	*ast;
+	char	*readed;
+
+	while (1)
+	{
+		setup_signal();
+		readed = readline("minishell>>");
+		if (!readed)
+			break ;
+		add_history(readed);
+		ast = bridge(readed);
+		if (g_signal_receivd == SIGINT)
+		{
+			shell->exit_code = 130;
+			g_signal_receivd = 0;
+		}
+		else
+			shell->exit_code = execute_ast(ast, shell);
+		free_ast(ast);
+		free(readed);
+		tcsetattr(STDIN_FILENO, TCSANOW, saved_term);
+	}
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_shell			shell;
+	struct termios	saved_term;
+
 	(void)argc;
 	(void)argv;
 	shell.envp = envp_dup(envp);
 	shell.exit_code = 0;
 	shell.running = 1;
-	while (1)
-	{
-		readed = readline("minishell>>");
-		if (!readed)
-			break;
-		add_history(readed);
-		ast = bridge(readed);
-		shell.exit_code = execute_ast(ast, &shell);
-		free_ast(ast);
-		free(readed);
-	}
+	tcgetattr(STDIN_FILENO, &saved_term);
+	shell_loop(&shell, &saved_term);
+	free_envp(shell.envp);
 	return (0);
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 00:35:45 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 08:42:34 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/23 19:07:32 by aakli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	fork_left(t_node *node, t_shell *shell, int	*pipefd)
+void	fork_left(t_node *node, t_shell *shell, int *pipefd)
 {
 	close(pipefd[0]);
 	dup2(pipefd[1], 1);

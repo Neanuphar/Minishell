@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/24 00:03:14 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/21 08:48:43 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/25 06:57:09 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,35 +50,56 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int exec_extern(char **cmd, t_shell *shell, t_node *node)
+static void	exec_child(char **cmd, t_shell *shell, t_node *node)
+{
+	char	*path;
+
+	if (apply_redirs(node->redirs, shell) == -1)
+		exit(1);
+	path = find_path(cmd[0], shell->envp);
+	if (path == NULL)
+	{
+		write(2, cmd[0], ft_strlen(cmd[0]));
+		write(2, ": command not found\n", 21);
+		exit(127);
+	}
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	execve(path, cmd, shell->envp);
+	exit(127);
+}
+
+int	exec_extern(char **cmd, t_shell *shell, t_node *node)
 {
 	pid_t	pid;
 	int		status;
-	char	*path;
 
 	pid = fork();
 	if (pid == -1)
 		return (1);
 	if (pid == 0)
+		exec_child(cmd, shell, node);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	waitpid(pid, &status, 0);
+	setup_signal();
+	if (WIFSIGNALED(status))
 	{
-		apply_redirs(node->redirs, shell);
-		path = find_path(cmd[0], shell->envp);
-		if (path == NULL)
-			exit(127);
-		execve(path, cmd, shell->envp);
-		exit(127);
+		if (WTERMSIG(status) == SIGQUIT)
+		{
+			write(1, "Quit", 4);
+			if (WCOREDUMP(status))
+				write(1, " (core dumped)", 14);
+		}
+		write(1, "\n", 1);
+		return (128 + WTERMSIG(status));
 	}
-	if (pid > 0)
-	{
-		waitpid(pid, &status, 0);
-		return (WEXITSTATUS(status));
-	}
-	return (0);
+	return (WEXITSTATUS(status));
 }
 
 int	free_tab(char **tab)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (tab[i])
