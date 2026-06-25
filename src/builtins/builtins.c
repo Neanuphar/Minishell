@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
+/*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/23 22:49:00 by aakli            ###   ########.fr       */
+/*   Updated: 2026/06/25 07:41:46 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	builtin_pwd(void)
 	return (0);
 }
 
-static char	*build_new_entry(t_shell *shell, int idx, char *arg, int eq_idx)
+static char	*build_new_entry(t_shell *shell, int i, char *arg, int eq_i)
 {
 	int		is_plus;
 	int		name_len;
@@ -82,39 +82,39 @@ static char	*build_new_entry(t_shell *shell, int idx, char *arg, int eq_idx)
 	char	*joined;
 	char	*entry;
 
-	is_plus = (eq_idx > 0 && arg[eq_idx - 1] == '+');
-	name_len = eq_idx - is_plus;
+	is_plus = (eq_i > 0 && arg[eq_i - 1] == '+');
+	name_len = eq_i - is_plus;
 	var = ft_substr(arg, 0, name_len);
-	if (is_plus && idx != -1)
+	if (is_plus && i != -1)
 	{
-		joined = ft_strjoin(shell->envp[idx] + name_len + 1, arg + eq_idx + 1);
+		joined = ft_strjoin(shell->envp[i] + name_len + 1, arg + eq_i + 1);
 		entry = make_entry(var, joined);
 		free(joined);
 	}
 	else
-		entry = make_entry(var, arg + eq_idx + 1);
+		entry = make_entry(var, arg + eq_i + 1);
 	free(var);
 	return (entry);
 }
 
 int	builtin_export(char **argv, t_shell *shell)
 {
-	int		eq_idx;
+	int		eq_i;
 	int		is_plus;
 	char	*var;
-	int		idx;
+	int		i;
 	char	*entry;
 
 	if (argv[1] == NULL)
 		return (export_print(shell), 0);
 	if (ft_strchr(argv[1], '=') == NULL)
 		return (env_add(shell, argv[1]), 0);
-	eq_idx = ft_strchr(argv[1], '=') - argv[1];
-	is_plus = (eq_idx > 0 && argv[1][eq_idx - 1] == '+');
-	var = ft_substr(argv[1], 0, eq_idx - is_plus);
-	idx = env_find(shell->envp, var);
-	entry = build_new_entry(shell, idx, argv[1], eq_idx);
+	eq_i = ft_strchr(argv[1], '=') - argv[1];
+	is_plus = (eq_i > 0 && argv[1][eq_i - 1] == '+');
+	var = ft_substr(argv[1], 0, eq_i - is_plus);
+	i = env_find(shell->envp, var);
+	entry = build_new_entry(shell, i, argv[1], eq_i);
 	free(var);
-	export_store(shell, idx, entry);
+	export_store(shell, i, entry);
 	return (0);
 }

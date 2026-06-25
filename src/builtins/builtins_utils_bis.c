@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 19:41:46 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/25 06:42:28 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/25 07:41:46 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ char	*make_entry(char *name, char *value)
 	return (entry);
 }
 
-void	export_store(t_shell *shell, int idx, char *entry)
+void	export_store(t_shell *shell, int i, char *entry)
 {
-	if (idx != -1)
+	if (i != -1)
 	{
-		free(shell->envp[idx]);
-		shell->envp[idx] = entry;
+		free(shell->envp[i]);
+		shell->envp[i] = entry;
 	}
 	else
 	{

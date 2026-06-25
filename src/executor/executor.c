@@ -3,21 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
+/*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/23 19:07:40 by aakli            ###   ########.fr       */
+/*   Updated: 2026/06/25 08:43:26 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+static int	exec_builtin(t_node *node, t_shell *shell, char **cmd)
+{
+	int	status;
+	int	saved[2];
+
+	if (ft_strncmp(cmd[0], "exit", 5) == 0)
+	{
+		status = (apply_redirs(node->redirs, shell), run_builtin(cmd[0], cmd,
+					shell));
+		return (free_tab(cmd), status);
+	}
+	if (node->redirs)
+	{
+		saved[0] = dup(1);
+		saved[1] = dup(0);
+	}
+	status = (apply_redirs(node->redirs, shell), run_builtin(cmd[0], cmd,
+				shell));
+	if (node->redirs)
+	{
+		dup2(saved[0], 1);
+		dup2(saved[1], 0);
+		close(saved[0]);
+		close(saved[1]);
+	}
+	return (free_tab(cmd), status);
+}
+
 static int	exec_cmd(t_node *node, t_shell *shell)
 {
 	char	**cmd;
 	int		status;
-	int		saved_out;
-	int		saved_in;
 
 	cmd = expand_argv(node->argv, shell);
 	if (cmd == NULL)
@@ -25,20 +51,9 @@ static int	exec_cmd(t_node *node, t_shell *shell)
 	if (!cmd[0])
 		return (free_tab(cmd), 0);
 	if (is_builtin(node->argv[0]) == 1)
-	{
-		saved_out = dup(1);
-		saved_in = dup(0);
-		status = (apply_redirs(node->redirs, shell), run_builtin(cmd[0], cmd,
-					shell));
-		dup2(saved_out, 1);
-		dup2(saved_in, 0);
-		return (close(saved_out), close(saved_in), free_tab(cmd), status);
-	}
-	else
-	{
-		status = exec_extern(cmd, shell, node);
-		return (free_tab(cmd), status);
-	}
+		return (exec_builtin(node, shell, cmd));
+	status = exec_extern(cmd, shell, node);
+	return (free_tab(cmd), status);
 }
 
 static int	exec_pipe(t_node *node, t_shell *shell)

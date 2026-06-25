@@ -6,7 +6,7 @@
 /*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/25 06:44:49 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/25 07:41:46 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ void				cd_update_pwd(t_shell *shell, char *PWD, int boolen);
 /* met à jour OLDPWD ou PWD */
 int					is_flag_n(char *s);
 char				*make_entry(char *name, char *value);
-void				export_store(t_shell *shell, int idx, char *entry);
+void				export_store(t_shell *shell, int i, char *entry);
 int					exit_error(char *argv);
 int					is_all_num(char *argv);
 void				free_envp(char **envp);
