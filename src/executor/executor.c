@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
+/*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/25 21:00:43 by aakli            ###   ########.fr       */
+/*   Updated: 2026/06/27 11:48:45 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,11 @@ static int	exec_pipe(t_node *node, t_shell *shell)
 		fork_right(node, shell, pipefd);
 	close(pipefd[0]);
 	close(pipefd[1]);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	waitpid(pid_left, NULL, 0);
 	waitpid(pid_right, &status, 0);
+	setup_signal();
 	return (WEXITSTATUS(status));
 }
 
