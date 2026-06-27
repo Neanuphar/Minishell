@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/25 07:41:46 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/25 23:25:40 by aakli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,20 @@ int	builtin_cd(char **argv, t_shell *shell)
 	char	*old_pwd;
 
 	if (argv[1] == NULL)
-		chdir(getenv("HOME"));
-	else
+		return (chdir(getenv("HOME")), 0);
+	old_pwd = getcwd(NULL, 0);
+	if (ft_strncmp(argv[1], "-", 2) == 0)
 	{
-		old_pwd = getcwd(NULL, 0);
-		cd_update_pwd(shell, old_pwd, 1);
-		if (chdir(argv[1]) == -1)
-			return (free(old_pwd), 1);
-		new_pwd = getcwd(NULL, 0);
-		cd_update_pwd(shell, new_pwd, 0);
-		free(old_pwd);
-		free(new_pwd);
+		if (cd_dash(shell, old_pwd) == 1)
+			return (1);
 	}
+	else if (cd_classic(argv[1], old_pwd) == 1)
+		return (1);
+	cd_update_pwd(shell, old_pwd, 1);
+	new_pwd = getcwd(NULL, 0);
+	cd_update_pwd(shell, new_pwd, 0);
+	free(old_pwd);
+	free(new_pwd);
 	return (0);
 }
 
@@ -74,7 +76,7 @@ int	builtin_pwd(void)
 	return (0);
 }
 
-static char	*build_new_entry(t_shell *shell, int i, char *arg, int eq_i)
+char	*build_new_entry(t_shell *shell, int i, char *arg, int eq_i)
 {
 	int		is_plus;
 	int		name_len;
@@ -108,13 +110,20 @@ int	builtin_export(char **argv, t_shell *shell)
 	if (argv[1] == NULL)
 		return (export_print(shell), 0);
 	if (ft_strchr(argv[1], '=') == NULL)
-		return (env_add(shell, argv[1]), 0);
+		return (export_no_value(argv[1], shell));
 	eq_i = ft_strchr(argv[1], '=') - argv[1];
 	is_plus = (eq_i > 0 && argv[1][eq_i - 1] == '+');
 	var = ft_substr(argv[1], 0, eq_i - is_plus);
+	if (!is_valid_identifier(var))
+	{
+		ft_putstr_fd("minishell: export: `", 2);
+		ft_putstr_fd(argv[1], 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
+		free(var);
+		return (1);
+	}
 	i = env_find(shell->envp, var);
 	entry = build_new_entry(shell, i, argv[1], eq_i);
 	free(var);
-	export_store(shell, i, entry);
-	return (0);
+	return (export_store(shell, i, entry), 0);
 }

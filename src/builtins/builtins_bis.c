@@ -6,7 +6,7 @@
 /*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/24 00:43:32 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/24 20:00:18 by aakli            ###   ########.fr       */
+/*   Updated: 2026/06/25 21:01:42 by aakli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	builtin_unset(char **argv, t_shell *shell)
 {
 	int	i;
 
+	if (argv[1] == NULL)
+		return (0);
 	i = env_find(shell->envp, argv[1]);
 	if (i != -1)
 	{

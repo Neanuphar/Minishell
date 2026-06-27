@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils_bis.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 19:41:46 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/25 07:41:46 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/25 23:26:44 by aakli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	is_all_num(char *argv)
 
 	i = 0;
 	if (argv[0] == '\0')
-    	return (1);
+		return (1);
 	if (argv[0] == '-' || argv[0] == '+')
 		i++;
 	while (argv[i])

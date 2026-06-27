@@ -6,7 +6,7 @@
 /*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/24 23:54:29 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/23 18:57:44 by aakli            ###   ########.fr       */
+/*   Updated: 2026/06/25 21:04:09 by aakli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,16 +66,31 @@ char	**env_add(t_shell *shell, char *entry)
 
 void	export_print(t_shell *shell)
 {
-	int	i;
+	char	**copy;
+	int		len;
+	int		i;
 
+	len = 0;
+	while (shell->envp[len])
+		len++;
+	copy = (char **)malloc(sizeof(char *) * (len + 1));
 	i = 0;
-	while (shell->envp[i] != NULL)
+	while (i < len)
+	{
+		copy[i] = shell->envp[i];
+		i++;
+	}
+	copy[len] = NULL;
+	sort_envp_copy(copy, len);
+	i = 0;
+	while (copy[i])
 	{
 		ft_putstr_fd("declare -x ", 1);
-		ft_putstr_fd(shell->envp[i], 1);
+		ft_putstr_fd(copy[i], 1);
 		ft_putchar_fd('\n', 1);
 		i++;
 	}
+	free(copy);
 }
 
 void	cd_update_pwd(t_shell *shell, char *PWD, int boolen)

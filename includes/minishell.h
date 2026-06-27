@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/25 07:41:46 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/25 23:27:16 by aakli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # include <sys/wait.h>  /* wait waitpid wait3 wait4 */
 # include <termios.h>   /* tcsetattr tcgetattr */
 # include <unistd.h>
+# include <errno.h>
 /* write read access fork execve dup dup2 piwatchpe
 close getcwd chdir unlink isatty ttyname ttyslot */
 
@@ -186,12 +187,19 @@ void				export_print(t_shell *shell);
 /* affiche toutes les variables avec declare -x */
 void				cd_update_pwd(t_shell *shell, char *PWD, int boolen);
 /* met à jour OLDPWD ou PWD */
+int					is_valid_identifier(const char *id);
+int					export_no_value(char *arg, t_shell *shell);
+char				*build_new_entry(t_shell *shell, int i, char *arg,
+						int eq_i);
 int					is_flag_n(char *s);
 char				*make_entry(char *name, char *value);
 void				export_store(t_shell *shell, int i, char *entry);
 int					exit_error(char *argv);
 int					is_all_num(char *argv);
 void				free_envp(char **envp);
+int					cd_dash(t_shell *shell, char *old_pwd);
+int					cd_classic(char *arg, char *old_pwd);
+void				sort_envp_copy(char **copy, int len);
 /* vérifie si s est un flag -n valide */
 
 #endif

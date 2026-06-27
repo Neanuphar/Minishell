@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 00:00:00 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/25 08:43:26 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/25 21:00:43 by aakli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ static int	exec_cmd(t_node *node, t_shell *shell)
 	char	**cmd;
 	int		status;
 
+	if (node->argv == NULL)
+		return (0);
 	cmd = expand_argv(node->argv, shell);
 	if (cmd == NULL)
 		return (1);

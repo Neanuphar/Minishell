@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
+/*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 15:32:33 by aakli             #+#    #+#             */
-/*   Updated: 2026/06/23 19:10:15 by aakli            ###   ########.fr       */
+/*   Updated: 2026/06/27 10:36:57 by moidoubi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ t_token	*lexer(char *line)
 			word = get_word(line, &i);
 			if (!word)
 			{
-				printf("minishell: unclosed quote\n");
+				ft_putstr_fd("minishell: unclosed quote\n", 2);
 				free_token_list(list);
 				return (NULL);
 			}

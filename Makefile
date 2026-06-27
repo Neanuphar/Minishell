@@ -1,3 +1,4 @@
+
 NAME    = minishell
 CC      = cc
 CFLAGS  = -Wall -Wextra -Werror
@@ -32,6 +33,7 @@ SRCS    = src/main.c \
           src/builtins/builtins_utils.c \
 		  src/builtins/builtins_utils_bis.c \
 		  src/signal/signal.c\
+		  src/builtins/builtins_three.c
 
 OBJS    = $(SRCS:.c=.o)
 TOTAL   = $(words $(SRCS))

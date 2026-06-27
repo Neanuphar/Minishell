@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moidoubi <moidoubi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aakli <aakli@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/07 00:35:45 by moidoubi          #+#    #+#             */
-/*   Updated: 2026/06/25 09:25:47 by moidoubi         ###   ########.fr       */
+/*   Updated: 2026/06/25 23:26:09 by aakli            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	fork_left(t_node *node, t_shell *shell, int *pipefd)
 {
-	int status;
-	
+	int	status;
+
 	close(pipefd[0]);
 	dup2(pipefd[1], 1);
 	close(pipefd[1]);
@@ -26,7 +26,7 @@ void	fork_left(t_node *node, t_shell *shell, int *pipefd)
 
 void	fork_right(t_node *node, t_shell *shell, int *pipefd)
 {
-	int status;
+	int	status;
 
 	close(pipefd[1]);
 	dup2(pipefd[0], 0);
